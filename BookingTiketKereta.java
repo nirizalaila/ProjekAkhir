@@ -14,7 +14,9 @@ public class BookingTiketKereta {
 
 
         System.out.println("==== PEMESANAN TIKET KERETA API ====");
-        System.out.println("Pilih kelas kereta :\n1.Ekonomi\n2.Bisnis\n3.Eksekutif\n");
+        System.out.println("======= Masukkan Nama anda : =======");
+        String nama = sc.next();
+        System.out.println("======= Pilih kelas kereta : =======\n1.Ekonomi\n2.Bisnis\n3.Eksekutif\n");
         System.out.println("Pilihan : ");
         pilihan = sc.nextInt();
 
@@ -34,9 +36,9 @@ public class BookingTiketKereta {
             System.out.println("Input yang anda masukkan salah");
         }
 
-        System.out.println("=================");
-        System.out.println("Tiket terpilih :");
-        System.out.println("Kelas " + kelas + " Dengan harga Rp." + harga_tiket);
+        System.out.println("==================================");
+        System.out.println("Tiket terpilih : \nAtas nama : " + nama );
+        System.out.println("== Kelas " + kelas + " Dengan harga Rp." + harga_tiket + " ==");
 
 
         
