@@ -20,7 +20,25 @@ public class BookingTiketKereta {
         System.out.println("Pilihan : ");
         pilihan = sc.nextInt();
 
-        if (pilihan == 1){
+        switch (pilihan) {
+            case 1:
+            System.out.println("Atas nama :\n" +nama+ "\nPemesanan tiket kelas Ekonomi dengan harga Rp.45000");
+            break;
+
+            case 2:
+            System.out.println("Atas nama : \n " +nama+ "\nPemesanan tiket kelas Bisnis dengan harga Rp.65000");
+            break;
+
+            case 3:
+            System.out.println("Atas nama :\n" +nama+ "\nPemesanan tiket kelas Eksekutif dengan harga Rp.80000");
+            break;
+
+            default:
+            System.out.println("Input yang anda masukkan salah");
+
+        }
+
+        /* if (pilihan == 1){
             kelas = "Ekonomi";
             harga_tiket = 45000;
         
@@ -38,7 +56,7 @@ public class BookingTiketKereta {
 
         System.out.println("==================================");
         System.out.println("Tiket terpilih : \nAtas nama : " + nama );
-        System.out.println("== Kelas " + kelas + " Dengan harga Rp." + harga_tiket + " ==");
+        System.out.println("== Kelas " + kelas + " Dengan harga Rp." + harga_tiket + " =="); */
 
 
         
