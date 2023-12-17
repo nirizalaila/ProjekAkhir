@@ -79,6 +79,7 @@ public class proyekcoba {
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
+        initializeKursi();
 
         int pilihmenu;
 
@@ -121,7 +122,6 @@ public class proyekcoba {
 
     public static void pemesananTiket() {
 
-        initializeKursi();
         int pilihMenu;
 
         do {
@@ -159,19 +159,33 @@ public class proyekcoba {
         System.out.print("Masukkan Umur : ");
         int umur = sc.nextInt();
 
-        System.out.println("Jenis Kelamin : ");
-        for (int i = 0; i < jenisKelamin.length; i++) {
-            System.out.println((i + 1) + ". " + jenisKelamin[i]);
-        }
-        System.out.print("Pilih Jenis Kelamin (1-" + jenisKelamin.length + "): ");
-        int indeksJenisKelamin = sc.nextInt() - 1;
+        int indeksJenisKelamin;
+        do {
+            System.out.println("Jenis Kelamin : ");
+            for (int i = 0; i < jenisKelamin.length; i++) {
+                System.out.println((i + 1) + ". " + jenisKelamin[i]);
+            }
+            System.out.print("Pilih Jenis Kelamin (1-" + jenisKelamin.length + "): ");
+            indeksJenisKelamin = sc.nextInt() - 1;
 
-        System.out.println("Jenis Identitas : ");
-        for (int i = 0; i < jenisIdentitas.length; i++) {
-            System.out.println((i + 1) + ". " + jenisIdentitas[i]);
-        }
-        System.out.print("Pilih Jenis Identitas (1-" + jenisIdentitas.length + "): ");
-        int pilihIdentitas = sc.nextInt() - 1;
+            if (indeksJenisKelamin < 0 || indeksJenisKelamin >= jenisKelamin.length) {
+                System.out.println("Pilihan jenis kelamin tidak valid. Silakan pilih lagi.");
+            }
+        } while (indeksJenisKelamin < 0 || indeksJenisKelamin >= jenisKelamin.length);
+
+        int pilihIdentitas;
+        do {
+            System.out.println("Jenis Identitas : ");
+            for (int i = 0; i < jenisIdentitas.length; i++) {
+                System.out.println((i + 1) + ". " + jenisIdentitas[i]);
+            }
+            System.out.print("Pilih Jenis Identitas (1-" + jenisIdentitas.length + "): ");
+            pilihIdentitas = sc.nextInt() - 1;
+
+            if (pilihIdentitas < 0 || pilihIdentitas >= jenisIdentitas.length) {
+                System.out.println("Pilihan jenis identitas tidak valid. Silakan pilih lagi.");
+            }
+        } while (pilihIdentitas < 0 || pilihIdentitas >= jenisIdentitas.length);
 
         System.out.println("Kota Asal Keberangkatan : ");
         for (int i = 0; i < kota.length; i++) {
@@ -180,21 +194,22 @@ public class proyekcoba {
         System.out.print("Pilih Kota Asal Keberangkatan (1-" + kota.length + "): ");
         int pilihAsal = sc.nextInt();
 
-        if (pilihAsal < 1 || pilihAsal > kota.length) {
-            System.out.println("Pilihan kota asal tidak valid.");
-            return;
-
-        }
-
         System.out.println("Kota Tujuan : ");
         for (int i = 0; i < kota.length; i++) {
             System.out.println((i + 1) + ". " + kota[i]);
         }
         System.out.print("Pilih Kota Tujuan (1-" + kota.length + "): ");
         int pilihTujuan = sc.nextInt();
-        if (pilihTujuan < 1 || pilihTujuan > kota.length) {
-            System.out.println("Pilihan kota tujuan tidak valid.");
-            return;
+
+        while (pilihAsal == pilihTujuan || pilihAsal < 1 || pilihAsal > kota.length || pilihTujuan < 1
+                || pilihTujuan > kota.length) {
+            System.out.println("Salah input. Silakan pilih lagi.");
+
+            System.out.print("Pilih Kota Asal Keberangkatan (1-" + kota.length + "): ");
+            pilihAsal = sc.nextInt();
+
+            System.out.print("Pilih Kota Tujuan (1-" + kota.length + "): ");
+            pilihTujuan = sc.nextInt();
         }
 
         System.out.println("Kelas : ");
@@ -580,11 +595,11 @@ public class proyekcoba {
     }
 
     public static void tampilkanRiwayatPemesanan() {
+        System.out.println("\n================================");
         System.out.println("Riwayat Pemesanan:");
         for (Pemesanan pemesanan : riwayatPemesanan) {
             System.out.println(pemesanan);
         }
+        System.out.println("================================\n");
     }
-    
-
 }
