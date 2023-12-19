@@ -5,7 +5,11 @@ import java.util.List;
 
 public class proyekcoba {
     static Scanner sc = new Scanner(System.in);
-
+    static int totalHarga = 0;
+    static int totalHargaMakanan = 0;
+    static String[] menuMakanan = { "Bakso", "Nasi Goreng", "Mie Ayam", "Nasi Fried Chicken", "Roti Bakar", "Es Teh",
+            "Air Mineral" };
+    static int[] hargaMakanan = { 14000, 15000, 12000, 16000, 11000, 5000, 4000 };
     static String[] kelas = { "Ekonomi", "Bisnis", "Eksekutif" };
     static String[] kota = { "Jakarta", "Bandung", "Cirebon", "Purwokerto", "Semarang", "Yogyakarta", "Solo", "Kediri",
             "Malang", "Surabaya" };
@@ -46,7 +50,8 @@ public class proyekcoba {
                     { 500000, 400000, 350000, 300000, 250000, 200000, 0, 200000, 250000, 300000 },
                     { 550000, 450000, 400000, 350000, 300000, 250000, 200000, 0, 200000, 250000 },
                     { 600000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0, 200000 },
-                    { 650000, 550000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0 } } };
+                    { 650000, 550000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0 } }
+    };
     static List<Pemesanan> riwayatPemesanan = new ArrayList<>();
 
     static class Pemesanan {
@@ -137,7 +142,6 @@ public class proyekcoba {
             switch (pilihMenu) {
                 case 1:
                     pesanTiket();
-
                     break;
                 case 2:
                     cekTempatDuduk();
@@ -153,6 +157,7 @@ public class proyekcoba {
     }
 
     static void pesanTiket() {
+
         int totalHarga = 0;
         System.out.print("Masukkan Nama : ");
         String nama = sc.next();
@@ -246,9 +251,70 @@ public class proyekcoba {
             System.out.println("Pilihan tidak valid. Silakan ulangi.");
             return;
         }
+        System.out.println("Apakah Anda ingin memesan makanan? (Ya/Tidak)");
+        String jawaban = sc.next();
+        if (jawaban.equalsIgnoreCase("Ya")) {
+            totalHargaMakanan = pesanMakanan(); // Menyimpan total harga makanan
+        }
+
+        totalHarga += totalHargaMakanan;
+
         prosesPilihanKelas(nama, umur, jenisKelamin[indeksJenisKelamin], jenisIdentitas[pilihIdentitas],
                 pilihAsal - 1, pilihTujuan - 1, pilihKelas - 1, totalHarga);
+    }
 
+    static int pesanMakanan() {
+        System.out.println("\n================================");
+        System.out.println("Menu Makanan:");
+
+        // Menampilkan daftar menu makanan
+        for (int i = 0; i < menuMakanan.length; i++) {
+            System.out.println((i + 1) + ". " + menuMakanan[i] + " - Rp. " + hargaMakanan[i]);
+        }
+
+        System.out.println((menuMakanan.length + 1) + ". Kembali ke Menu Utama");
+        System.out.println("================================");
+
+        int totalHargaMakanan = 0; // Total harga makanan yang dipilih
+        int jumlahMakanan = 0; // Jumlah makanan yang ingin dibeli
+
+        while (true) {
+            System.out.print("Pilih menu makanan (1-" + (menuMakanan.length + 1) + "): ");
+            int pilihan = sc.nextInt();
+
+            if (pilihan >= 1 && pilihan <= menuMakanan.length) {
+                // Memasukkan jumlah makanan yang ingin dibeli
+                System.out.print("Berapa banyak " + menuMakanan[pilihan - 1] + " yang ingin dibeli: ");
+                int jumlah = sc.nextInt();
+
+                // Menambahkan total harga makanan yang dipilih
+                totalHargaMakanan += (hargaMakanan[pilihan - 1] * jumlah);
+
+                // Menampilkan pesanan makanan
+                System.out.println("Anda telah memesan " + jumlah + " " + menuMakanan[pilihan - 1] + ".");
+                jumlahMakanan += jumlah;
+
+                totalHarga += totalHargaMakanan;
+
+                // Menampilkan total harga makanan sementara
+                System.out.println("Total Harga Makanan Sementara: Rp. " + totalHargaMakanan);
+
+            } else if (pilihan == menuMakanan.length + 1) {
+                break; // Keluar dari menu makanan
+            } else {
+                System.out.println("Pilihan tidak valid. Silakan coba lagi.");
+            }
+
+        }
+
+        // Menambahkan total harga makanan ke totalHarga tiket
+        totalHarga += totalHargaMakanan;
+
+        // Menampilkan kembali menu utama
+        System.out.println("================================");
+        System.out.println("Kembali ke Menu Utama");
+        System.out.println("================================");
+        return totalHargaMakanan;
     }
 
     static void prosesPilihanKelas(String nama, int umur, String jenisKelamin, String pilihIdentitas,
