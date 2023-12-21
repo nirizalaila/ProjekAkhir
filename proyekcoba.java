@@ -2,10 +2,15 @@ import java.util.Scanner;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 public class proyekcoba {
-    static Scanner sc = new Scanner(System.in);
 
+    static Scanner sc = new Scanner(System.in);
+    static int totalHarga = 0;
+    static String[] menuMakanan = { "Bakso", "Nasi Goreng", "Mie Ayam", "Nasi Fried Chicken", "Roti Bakar", "Es Teh",
+            "Air Mineral" };
+    static int[] hargaMakanan = { 14000, 15000, 12000, 16000, 11000, 5000, 4000 };
     static String[] kelas = { "Ekonomi", "Bisnis", "Eksekutif" };
     static String[] kota = { "Jakarta", "Bandung", "Cirebon", "Purwokerto", "Semarang", "Yogyakarta", "Solo", "Kediri",
             "Malang", "Surabaya" };
@@ -13,6 +18,7 @@ public class proyekcoba {
     static String[] jenisKelamin = { "Laki-Laki", "Perempuan" };
     static boolean[][][] kursiTersedia = new boolean[kelas.length][kota.length][];
     static int hargaTiket[][][] = {
+            // Daftar Harga Tiket Ekonomi
             { { 0, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000 },
                     { 100000, 0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000 },
                     { 150000, 50000, 0, 50000, 100000, 150000, 200000, 250000, 300000, 350000 },
@@ -46,9 +52,13 @@ public class proyekcoba {
                     { 500000, 400000, 350000, 300000, 250000, 200000, 0, 200000, 250000, 300000 },
                     { 550000, 450000, 400000, 350000, 300000, 250000, 200000, 0, 200000, 250000 },
                     { 600000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0, 200000 },
-                    { 650000, 550000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0 } } };
+                    { 650000, 550000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0 } }
+    };
+
+    // list untuk menyimpan riwayat pemesanan
     static List<Pemesanan> riwayatPemesanan = new ArrayList<>();
 
+    // class untuk menyimpan data pemesanan riwayat pemesanan
     static class Pemesanan {
         String nama;
         int umur;
@@ -58,9 +68,12 @@ public class proyekcoba {
         String tujuan;
         String kelas;
         int harga;
+        int totalHargaMakanan;
+        String nomorPembelian;
 
+        // constructor untuk class Pemesanan
         public Pemesanan(String nama, int umur, String jenisKelamin, String identitas, String asal, String tujuan,
-                String kelas, int harga) {
+                String kelas, int harga, int totalHargaMakanan, String nomorPembelian) {
             this.nama = nama;
             this.umur = umur;
             this.jenisKelamin = jenisKelamin;
@@ -69,17 +82,25 @@ public class proyekcoba {
             this.tujuan = tujuan;
             this.kelas = kelas;
             this.harga = harga;
+            this.totalHargaMakanan = totalHargaMakanan;
+            this.nomorPembelian = nomorPembelian;
         }
 
+        // method untuk menampilkan data pemesanan ke riwayat pemesanan
         public String toString() {
-            return "Nama: " + nama + ", Umur: " + umur + ", Jenis Kelamin: " + jenisKelamin + ", Identitas: "
-                    + identitas + ", Asal: " + asal + ", Tujuan: " + tujuan + ", Kelas: " + kelas + ", Harga: " + harga;
+            return "\nNama\t\t\t: " + nama + "\nUmur\t\t\t: " + umur + "\nJenis Kelamin\t\t: " + jenisKelamin
+                    + "\nIdentitas\t\t: "
+                    + identitas + "\nAsal\t\t\t: " + asal + "\nTujuan\t\t\t: " + tujuan + "\nKelas\t\t\t: " + kelas
+                    + "\nHarga Tiket\t\t: " + "Rp."
+                    + harga
+                    + "\nTotal Harga Makanan\t: " + "Rp." +totalHargaMakanan + "\nNomor Pembelian Tiket\t: " + nomorPembelian
+                    + "\n========================";
         }
     }
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        initializeKursi();
+        inisialKursi();
 
         int pilihmenu;
 
@@ -137,7 +158,6 @@ public class proyekcoba {
             switch (pilihMenu) {
                 case 1:
                     pesanTiket();
-
                     break;
                 case 2:
                     cekTempatDuduk();
@@ -153,13 +173,31 @@ public class proyekcoba {
     }
 
     static void pesanTiket() {
+
+        Random random = new Random();
+
+        // Set karakter yang diizinkan untuk bagian huruf
+        String hurufHuruf = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        // Generate nomor acak
+        int acakNomor = random.nextInt(900000000) + 1000000000; // Nomor acak antara 1000000000 dan 1999999999
+
+        // Generate huruf acak
+        char hurufAcak = hurufHuruf.charAt(random.nextInt(hurufHuruf.length()));
+
+        // Gabungkan nomor acak dan huruf acak
+        String nomorPembelian = hurufAcak + String.valueOf(acakNomor);
+
+        int totalHargaMakanan = 0;
         int totalHarga = 0;
-        System.out.print("Masukkan Nama : ");
-        String nama = sc.next();
+        int indeksJenisKelamin;
+        int pilihIdentitas;
         System.out.print("Masukkan Umur : ");
         int umur = sc.nextInt();
+        sc.nextLine(); // untuk menghindari bug
+        System.out.print("Masukkan Nama : ");
+        String nama = sc.nextLine();
 
-        int indeksJenisKelamin;
         do {
             System.out.println("Jenis Kelamin : ");
             for (int i = 0; i < jenisKelamin.length; i++) {
@@ -173,7 +211,6 @@ public class proyekcoba {
             }
         } while (indeksJenisKelamin < 0 || indeksJenisKelamin >= jenisKelamin.length);
 
-        int pilihIdentitas;
         do {
             System.out.println("Jenis Identitas : ");
             for (int i = 0; i < jenisIdentitas.length; i++) {
@@ -238,7 +275,9 @@ public class proyekcoba {
                 kota[pilihAsal - 1],
                 kota[pilihTujuan - 1],
                 kelas[pilihKelas - 1],
-                totalHarga);
+                totalHarga,
+                totalHargaMakanan,
+                nomorPembelian);
         riwayatPemesanan.add(newBooking);
 
         if (pilihAsal < 1 || pilihAsal > kota.length || pilihTujuan < 1 || pilihTujuan > kota.length || pilihKelas < 1
@@ -246,16 +285,80 @@ public class proyekcoba {
             System.out.println("Pilihan tidak valid. Silakan ulangi.");
             return;
         }
-        prosesPilihanKelas(nama, umur, jenisKelamin[indeksJenisKelamin], jenisIdentitas[pilihIdentitas],
-                pilihAsal - 1, pilihTujuan - 1, pilihKelas - 1, totalHarga);
+        System.out.println("Apakah Anda ingin memesan makanan? (Ya/Tidak)");
+        String jawaban = sc.next();
+        if (jawaban.equalsIgnoreCase("Ya")) {
+            totalHargaMakanan = pesanMakanan(); // Menyimpan total harga makanan
+            newBooking.totalHargaMakanan = totalHargaMakanan; // Menyimpan total harga makanan ke objek pemesanan
+        }
 
+        totalHarga += totalHargaMakanan;
+
+        prosesPilihanKelas(nama, umur, jenisKelamin[indeksJenisKelamin], jenisIdentitas[pilihIdentitas],
+                pilihAsal - 1, pilihTujuan - 1, pilihKelas - 1, totalHarga, nomorPembelian);
+    }
+
+    //
+    static int pesanMakanan() {
+        String nomorPembelian;
+        System.out.println("\n================================");
+        System.out.println("Menu Makanan:");
+
+        // Menampilkan daftar menu makanan
+        for (int i = 0; i < menuMakanan.length; i++) {
+            System.out.println((i + 1) + ". " + menuMakanan[i] + " - Rp. " + hargaMakanan[i]);
+        }
+
+        System.out.println((menuMakanan.length + 1) + ". Kembali ke Menu Utama");
+        System.out.println("================================");
+
+        int totalHargaMakanan = 0; // Total harga makanan yang dipilih
+        int jumlahMakanan = 0; // Jumlah makanan yang ingin dibeli
+
+        while (true) {
+            System.out.print("Pilih menu makanan (1-" + (menuMakanan.length + 1) + "): ");
+            int pilihan = sc.nextInt();
+
+            if (pilihan >= 1 && pilihan <= menuMakanan.length) {
+                // Memasukkan jumlah makanan yang ingin dibeli
+                System.out.print("Berapa banyak " + menuMakanan[pilihan - 1] + " yang ingin dibeli: ");
+                int jumlah = sc.nextInt();
+
+                // Menambahkan total harga makanan yang dipilih ke variabel statis di kelas
+                // utama
+                totalHargaMakanan += (hargaMakanan[pilihan - 1] * jumlah);
+
+                // Menampilkan pesanan makanan
+                System.out.println("Anda telah memesan " + jumlah + " " + menuMakanan[pilihan - 1] + ".");
+                jumlahMakanan += jumlah;
+
+                // Menampilkan total harga makanan sementara
+                System.out.println("Total Harga Makanan Sementara: Rp. " + totalHargaMakanan);
+
+            } else if (pilihan == menuMakanan.length + 1) {
+                break; // Keluar dari menu makanan
+            } else {
+                System.out.println("Pilihan tidak valid. Silakan coba lagi.");
+            }
+
+        }
+
+        // Menambahkan total harga makanan ke totalHarga tiket di kelas utama
+        totalHarga += totalHargaMakanan;
+
+        // Menampilkan kembali menu utama
+        System.out.println("================================");
+        System.out.println("Kembali ke Menu Utama");
+        System.out.println("================================");
+        return totalHargaMakanan;
     }
 
     static void prosesPilihanKelas(String nama, int umur, String jenisKelamin, String pilihIdentitas,
-            int pilihAsal, int pilihTujuan, int pilihKelas, int totalHarga) {
+            int pilihAsal, int pilihTujuan, int pilihKelas, int totalHarga, String nomorPembelian) {
         tampilkanDaftarHarga(pilihKelas, pilihAsal, pilihTujuan);
         System.out.println("Harga Tiket : " + hargaTiket[pilihKelas][pilihAsal][pilihTujuan]);
-        tampilkanDetailPesan(nama, umur, jenisKelamin, pilihIdentitas, kota[pilihAsal], kota[pilihTujuan], totalHarga);
+        tampilkanDetailPesan(nama, umur, jenisKelamin, pilihIdentitas, kota[pilihAsal], kota[pilihTujuan], totalHarga,
+                nomorPembelian);
     }
 
     static void tampilkanDaftarHarga(int pilihKelas, int pilihAsal, int pilihTujuan) {
@@ -270,6 +373,22 @@ public class proyekcoba {
         }
     }
 
+    // Method untuk menampilkan riwayat pemesanan
+    static void tampilkanDetailPesan(String nama, int umur, String jenisKelamin, String pilihIdentitas,
+            String pilihAsal, String pilihTujuan, int totalHarga, String nomorPembelian) {
+        System.out.println("================================");
+        System.out.println("Nama \t\t\t: " + nama);
+        System.out.println("Umur \t\t\t: " + umur);
+        System.out.println("Jenis Kelamin \t\t: " + jenisKelamin);
+        System.out.println("Jenis Identitas \t: " + pilihIdentitas);
+        System.out.println("Kota Asal Keberangkatan : " + pilihAsal);
+        System.out.println("Kota Tujuan \t\t: " + pilihTujuan);
+        System.out.println("Total Harga \t\t: " +"Rp." + totalHarga);
+        System.out.println("Nomor Pembelian Tiket\t: " + nomorPembelian);
+        System.out.println("================================\n");
+    }
+
+    // Method untuk memilih tempat duduk
     static int pilihTempatDuduk(int pilihKelas, int pilihAsal, int pilihTujuan) {
         System.out.print("Pilih Tempat Duduk (1 - 64): ");
         int nomorKursi = sc.nextInt();
@@ -277,9 +396,9 @@ public class proyekcoba {
         if (nomorKursi >= 1 && nomorKursi <= 64) {
             if (kursiTersedia[pilihKelas][pilihAsal][nomorKursi - 1]) {
                 System.out.println("Tempat duduk tersedia. Silakan pesan tiket.");
-                // Set the selected seat to unavailable
+                // untuk mengubah status kursi menjadi tidak tersedia
                 kursiTersedia[pilihKelas][pilihAsal][nomorKursi - 1] = false;
-                // Update the seat availability display
+                // untuk menampilkan kursi yang tersedia
                 tampilkanKursi(kursiTersedia[pilihKelas][pilihAsal]);
 
                 // Mengembalikan harga tiket yang dipilih
@@ -294,38 +413,19 @@ public class proyekcoba {
         }
     }
 
-    static void tampilkanDetailPesan(String nama, int umur, String jenisKelamin, String pilihIdentitas,
-            String pilihAsal, String pilihTujuan, int totalHarga) {
-        System.out.println("================================");
-        System.out.println("Nama : " + nama);
-        System.out.println("Umur : " + umur);
-        System.out.println("Jenis Kelamin : " + jenisKelamin);
-        System.out.println("Jenis Identitas : " + pilihIdentitas);
-        System.out.println("Kota Asal Keberangkatan : " + pilihAsal);
-        System.out.println("Kota Tujuan : " + pilihTujuan);
-        System.out.println("Total Harga : " + totalHarga);
-        System.out.println("================================\n");
-    }
-
-    static void initializeKursi() {
+    // Method untuk menginisialisasi kursi yang tersedia
+    static void inisialKursi() {
         for (int i = 0; i < kelas.length; i++) {
             for (int j = 0; j < kota.length; j++) {
-                kursiTersedia[i][j] = generateKursi();
+                kursiTersedia[i][j] = new boolean[64]; // inisialisasi array kursi
+                for (int k = 0; k < kursiTersedia[i][j].length; k++) {
+                    kursiTersedia[i][j][k] = true; // mengatur semua kursi menjadi tersedia
+                }
             }
         }
     }
 
-    static void updateSeatDisplay(int pilihKelas, int pilihAsal) {
-        System.out.println("===== " + kelas[pilihKelas] + " - " + kota[pilihAsal] + " =====");
-        tampilkanKursi(kursiTersedia[pilihKelas][pilihAsal]);
-    }
-
-    static boolean[] generateKursi() {
-        boolean[] kursi = new boolean[64];
-        Arrays.fill(kursi, true); // Mengatur semua kursi menjadi tersedia
-        return kursi;
-    }
-
+    // Method untuk mengecek tempat duduk
     static void cekTempatDuduk() {
         for (int i = 0; i < kota.length; i++) {
             System.out.printf("%2d. %-10s", (i + 1), kota[i]);
@@ -352,20 +452,23 @@ public class proyekcoba {
         }
     }
 
+    // Method untuk mengecek apakah input valid
     static boolean isValidInput(int pilihKota, int pilihKelas) {
         return (pilihKota >= 0 && pilihKota < kota.length) && (pilihKelas >= 0 && pilihKelas < kelas.length);
     }
 
+    // Method untuk mengisi tempat duduk
     static void isiTempatDuduk(int pilihKelas, int pilihAsal, int pilihTujuan) {
         System.out.print("Pilih Tempat Duduk (1 - 64): ");
         int nomorKursi = sc.nextInt();
 
+        // Validasi nomor kursi
         if (nomorKursi >= 1 && nomorKursi <= 64) {
             if (kursiTersedia[pilihKelas][pilihAsal][nomorKursi - 1]) {
                 System.out.println("Tempat duduk tersedia. Silakan pesan tiket.");
-                // Set the selected seat to unavailable
+                // Untuk mengubah status kursi menjadi tidak tersedia
                 kursiTersedia[pilihKelas][pilihAsal][nomorKursi - 1] = false;
-                // Update the seat availability display
+                // Untuk menampilkan kursi yang tersedia
                 tampilkanKursi(kursiTersedia[pilihKelas][pilihAsal]);
             } else {
                 System.out.println("Maaf, tempat duduk sudah dipesan. Pilih tempat lain.");
@@ -375,6 +478,7 @@ public class proyekcoba {
         }
     }
 
+    // Method untuk menampilkan kursi yang tersedia dan Mengubah Posisi
     static void tampilkanKursi(boolean[] kursiTersedia) {
         for (int i = 0; i < kursiTersedia.length; i++) {
             if (kursiTersedia[i]) {
@@ -389,16 +493,11 @@ public class proyekcoba {
                 System.out.print("\t");
             }
         }
-
     }
 
+    // Method untuk menampilkan jadwal kereta
     public static void tampilkanJadwalKereta() {
 
-        Scanner sc = new Scanner(System.in);
-
-        String[] kelas = { "Ekonomi", "Bisnis", "Eksekutif" };
-        String[] kota = { "Jakarta", "Bandung", "Cirebon", "Purwokerto", "Semarang", "Yogyakarta", "Solo", "Kediri",
-                "Malang", "Surabaya" };
         double[][] jarak = {
                 { 0, 150, 210, 350, 450, 560, 550, 710, 850, 800 },
                 { 150, 0, 160, 310, 420, 530, 520, 680, 820, 770 },
@@ -412,40 +511,41 @@ public class proyekcoba {
                 { 800, 770, 750, 460, 350, 340, 250, 90, 50, 0 }
         };
 
-        // Tampilkan menu pilihan kota
-        System.out.println("================================");
-        System.out.println("===  Tampilkan Jadwal Kereta ===");
-        System.out.println("================================");
-        for (int i = 0; i < kota.length; i++) {
-            System.out.printf("%2d. %-10s", (i + 1), kota[i]);
-            if ((i + 1) % 2 == 0) {
-                System.out.println();
-            } else {
-                System.out.print("\t");
-            }
-        }
-        System.out.println("================================");
-
         // Pilih kota dan kelas
         int pilihKota;
         int pilihKelas;
         int pilihTampilkanJadwal = 0;
         do {
-            System.out.print("\nPilih Kota   : ");
-            pilihKota = sc.nextInt();
-            System.out.println("\n================================");
-            System.out.println("Daftar Kelas : ");
-            for (int i = 0; i < kelas.length; i++) {
-                System.out.println((i + 1) + ". " + kelas[i]);
-            }
+            // Tampilkan menu pilihan kota
             System.out.println("================================");
-            System.out.print("Pilih Kelas  : ");
-            pilihKelas = sc.nextInt();
-
-            // Validasi input kota dan kelas
-            if (pilihKota < 1 || pilihKota > kota.length || pilihKelas < 1 || pilihKelas > kelas.length) {
-                System.out.println("Pilihan Kota atau Kelas tidak valid! Silahkan coba lagi!");
+            System.out.println("===  Tampilkan Jadwal Kereta ===");
+            System.out.println("================================");
+            for (int i = 0; i < kota.length; i++) {
+                System.out.printf("%2d. %-10s", (i + 1), kota[i]);
+                if ((i + 1) % 2 == 0) {
+                    System.out.println();
+                } else {
+                    System.out.print("\t");
+                }
             }
+            do {
+                System.out.println("================================");
+                System.out.print("\nPilih Kota   : ");
+                pilihKota = sc.nextInt();
+                System.out.println("\n================================");
+                System.out.println("Daftar Kelas : ");
+                for (int i = 0; i < kelas.length; i++) {
+                    System.out.println((i + 1) + ". " + kelas[i]);
+                }
+                System.out.println("================================");
+                System.out.print("Pilih Kelas  : ");
+                pilihKelas = sc.nextInt();
+
+                // Validasi input kota dan kelas
+                if (pilihKota < 1 || pilihKota > kota.length || pilihKelas < 1 || pilihKelas > kelas.length) {
+                    System.out.println("Pilihan Kota atau Kelas tidak valid! Silahkan coba lagi!");
+                }
+            } while (pilihKota < 1 || pilihKota > kota.length || pilihKelas < 1 || pilihKelas > kelas.length);
 
             // Tentukan kecepatan berdasarkan kelas
             double kecepatan = (pilihKelas == 1) ? 80 : ((pilihKelas == 2) ? 90 : 100);
@@ -469,7 +569,7 @@ public class proyekcoba {
 
             //
 
-            System.out.println("\n1. Kembali ke Menu Utama\n2. Kembali Melihat daftar Harga Lain");
+            System.out.println("\n1. Kembali ke Menu Utama\n2. Kembali Melihat daftar Jadwal Lain");
             System.out.print("\nPilihan : ");
             pilihTampilkanJadwal = sc.nextInt();
 
@@ -489,62 +589,18 @@ public class proyekcoba {
     }
 
     // Method untuk menghitung waktu selesai perjalanan
-    private static int[] hitungWaktuSelesai(int jamMulai, double waktu) {
+    public static int[] hitungWaktuSelesai(int jamMulai, double waktu) {
         int totalMenit = (int) (waktu * 60);
         int menitSelesai = (jamMulai * 60 + totalMenit) % (24 * 60);
         return new int[] { menitSelesai / 60, menitSelesai % 60 };
     }
 
     public static void tampilkanHargaTiket() {
-        Scanner sc = new Scanner(System.in);
-
-        String kelas[] = { "Ekonomi", "Bisnis", "Eksekutif" };
-
-        int hargaTiket[][][] = {
-                // Daftar Harga Tiket Ekonomi
-                { { 0, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000 },
-                        { 100000, 0, 50000, 100000, 150000, 200000, 250000, 300000, 350000, 400000 },
-                        { 150000, 50000, 0, 50000, 100000, 150000, 200000, 250000, 300000, 350000 },
-                        { 200000, 100000, 50000, 0, 50000, 100000, 150000, 200000, 250000, 300000 },
-                        { 250000, 150000, 100000, 50000, 0, 50000, 100000, 150000, 200000, 250000 },
-                        { 300000, 200000, 150000, 100000, 50000, 0, 50000, 100000, 150000, 200000 },
-                        { 350000, 250000, 200000, 150000, 100000, 50000, 0, 50000, 100000, 150000 },
-                        { 400000, 300000, 250000, 200000, 150000, 100000, 50000, 0, 50000, 100000 },
-                        { 450000, 350000, 300000, 250000, 200000, 150000, 100000, 50000, 0, 50000 },
-                        { 500000, 400000, 350000, 300000, 250000, 200000, 150000, 100000, 50000, 0 }
-                },
-                // Daftar Harga Tiket Bisnis
-                { { 0, 160000, 210000, 260000, 310000, 360000, 410000, 460000, 510000, 560000 },
-                        { 160000, 0, 110000, 160000, 210000, 260000, 310000, 360000, 410000, 460000 },
-                        { 210000, 110000, 0, 110000, 160000, 210000, 260000, 310000, 360000, 410000 },
-                        { 260000, 160000, 110000, 0, 110000, 160000, 210000, 260000, 310000, 360000 },
-                        { 310000, 210000, 160000, 110000, 0, 110000, 160000, 210000, 260000, 310000 },
-                        { 360000, 260000, 210000, 160000, 110000, 0, 110000, 160000, 210000, 260000 },
-                        { 410000, 310000, 260000, 210000, 160000, 110000, 0, 110000, 160000, 210000 },
-                        { 460000, 360000, 310000, 260000, 210000, 160000, 110000, 0, 110000, 160000 },
-                        { 510000, 410000, 360000, 310000, 260000, 210000, 160000, 110000, 0, 110000 },
-                        { 560000, 460000, 410000, 360000, 310000, 260000, 210000, 160000, 110000, 0 }
-                },
-                // Daftar Harga Tiket Eksekutif
-                { { 0, 250000, 300000, 350000, 400000, 450000, 500000, 550000, 600000, 650000 },
-                        { 250000, 0, 200000, 250000, 300000, 350000, 400000, 450000, 500000, 550000 },
-                        { 300000, 200000, 0, 150000, 200000, 250000, 300000, 350000, 400000, 450000 },
-                        { 350000, 250000, 150000, 0, 200000, 250000, 300000, 350000, 400000, 450000 },
-                        { 400000, 300000, 200000, 150000, 0, 200000, 250000, 300000, 350000, 400000 },
-                        { 450000, 350000, 300000, 250000, 200000, 0, 200000, 250000, 300000, 350000 },
-                        { 500000, 400000, 350000, 300000, 250000, 200000, 0, 200000, 250000, 300000 },
-                        { 550000, 450000, 400000, 350000, 300000, 250000, 200000, 0, 200000, 250000 },
-                        { 600000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0, 200000 },
-                        { 650000, 550000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0 } }
-        };
-
-        String kota[] = { "Jakarta", "Bandung", "Cirebon", "Purwokerto", "Semarang", "Yogyakarta", "Solo", "Kediri",
-                "Malang", "Surabaya" };
-
         System.out.println("================================");
         System.out.println("==== Tampilkan Harga Tiket  ====");
         System.out.println("================================");
 
+        // Tampilkan daftar kota
         for (int i = 0; i < kota.length; i++) {
             System.out.printf("%2d. %-10s", (i + 1), kota[i]);
             if ((i + 1) % 2 == 0) {
@@ -554,11 +610,12 @@ public class proyekcoba {
             }
         }
         System.out.println("================================");
+
         int pilihKota, pilihKelas, pilihDaftarHarga = 0;
         do {
             System.out.print("\nPilih Kota : ");
             pilihKota = sc.nextInt();
-
+            // Tampilkan daftar kelas
             System.out.println("\n================================");
             System.out.println("Daftar Kelas : ");
             for (int i = 0; i < kelas.length; i++) {
@@ -568,7 +625,7 @@ public class proyekcoba {
 
             System.out.print("\nPilih Kelas   : ");
             pilihKelas = sc.nextInt();
-
+            // Validasi input kota dan kelas
             if (pilihKota >= 1 && pilihKota <= kota.length && pilihKelas >= 1 && pilihKelas <= kelas.length) {
                 System.out.println("=====================================");
                 System.out.println("Pilihan Kota   : " + kota[pilihKota - 1]);
@@ -577,7 +634,6 @@ public class proyekcoba {
                 System.out.println("=====================================");
                 System.out.println(
                         "Harga Tiket " + kelas[pilihKelas - 1] + " dari " + kota[pilihKota - 1] + " ke kota lain:");
-
                 for (int i = 0; i < kota.length; i++) {
                     if (!kota[i].equals(kota[pilihKota - 1])) {
                         System.out.println("Ke " + kota[i] + ": " + hargaTiket[pilihKelas - 1][pilihKota - 1][i]);
@@ -594,6 +650,7 @@ public class proyekcoba {
                 || pilihDaftarHarga == 2);
     }
 
+    // Method untuk menampilkan riwayat pemesanan
     public static void tampilkanRiwayatPemesanan() {
         System.out.println("\n================================");
         System.out.println("Riwayat Pemesanan:");
