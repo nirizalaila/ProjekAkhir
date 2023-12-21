@@ -67,13 +67,12 @@ public class proyekcoba {
         String asal;
         String tujuan;
         String kelas;
-        int harga;
-        int totalHargaMakanan;
+        int totalHarga;
         String nomorPembelian;
 
         // constructor untuk class Pemesanan
         public Pemesanan(String nama, int umur, String jenisKelamin, String identitas, String asal, String tujuan,
-                String kelas, int harga, int totalHargaMakanan, String nomorPembelian) {
+                String kelas, int totalHarga, String nomorPembelian) {
             this.nama = nama;
             this.umur = umur;
             this.jenisKelamin = jenisKelamin;
@@ -81,8 +80,7 @@ public class proyekcoba {
             this.asal = asal;
             this.tujuan = tujuan;
             this.kelas = kelas;
-            this.harga = harga;
-            this.totalHargaMakanan = totalHargaMakanan;
+            this.totalHarga = totalHarga;
             this.nomorPembelian = nomorPembelian;
         }
 
@@ -91,9 +89,8 @@ public class proyekcoba {
             return "\nNama\t\t\t: " + nama + "\nUmur\t\t\t: " + umur + "\nJenis Kelamin\t\t: " + jenisKelamin
                     + "\nIdentitas\t\t: "
                     + identitas + "\nAsal\t\t\t: " + asal + "\nTujuan\t\t\t: " + tujuan + "\nKelas\t\t\t: " + kelas
-                    + "\nHarga Tiket\t\t: " + "Rp."
-                    + harga
-                    + "\nTotal Harga Makanan\t: " + "Rp." +totalHargaMakanan + "\nNomor Pembelian Tiket\t: " + nomorPembelian
+                    + "\nTotal Harga \t\t: " + "Rp."
+                    + totalHarga + "\nNomor Pembelian Tiket\t: " + nomorPembelian
                     + "\n========================";
         }
     }
@@ -110,7 +107,7 @@ public class proyekcoba {
             System.out.println("=============================================================");
 
             System.out.println(
-                    "\nDaftar Menu = \n1.Pesan Tiket\n2.Tampilkan Jadwal\n3.Tampilkan Harga\n4.Tampilkan Riwayat Pemesanan\n5.Exit");
+                    "\nDaftar Menu = \n1.Pesan Tiket\n2.Tampilkan Jadwal\n3.Tampilkan Harga\n4.Tampilkan Riwayat Pemesanan\n5.Cetak Struk\n6.Keluar");
             System.out.println("=============================================================");
             System.out.print("\nPilihan : ");
             pilihmenu = sc.nextInt();
@@ -129,6 +126,9 @@ public class proyekcoba {
                     tampilkanRiwayatPemesanan();
                     break;
                 case 5:
+                    cetakStrukID();
+                    break;
+                case 6:
                     System.out.println("=============================================================");
                     System.out.println("==============\t\tTERIMA KASIH\t\t=============");
                     System.out.println("=============================================================");
@@ -136,7 +136,7 @@ public class proyekcoba {
                 default:
                     System.out.println("=============== INPUT YANG ANDA MASUKKAN SALAH ==============\n\n");
             }
-        } while (pilihmenu != 5);
+        } while (pilihmenu != 6);
 
         sc.close();
     }
@@ -276,7 +276,6 @@ public class proyekcoba {
                 kota[pilihTujuan - 1],
                 kelas[pilihKelas - 1],
                 totalHarga,
-                totalHargaMakanan,
                 nomorPembelian);
         riwayatPemesanan.add(newBooking);
 
@@ -289,10 +288,10 @@ public class proyekcoba {
         String jawaban = sc.next();
         if (jawaban.equalsIgnoreCase("Ya")) {
             totalHargaMakanan = pesanMakanan(); // Menyimpan total harga makanan
-            newBooking.totalHargaMakanan = totalHargaMakanan; // Menyimpan total harga makanan ke objek pemesanan
         }
 
         totalHarga += totalHargaMakanan;
+        newBooking.totalHarga = totalHarga;
 
         prosesPilihanKelas(nama, umur, jenisKelamin[indeksJenisKelamin], jenisIdentitas[pilihIdentitas],
                 pilihAsal - 1, pilihTujuan - 1, pilihKelas - 1, totalHarga, nomorPembelian);
@@ -656,6 +655,29 @@ public class proyekcoba {
         System.out.println("Riwayat Pemesanan:");
         for (Pemesanan pemesanan : riwayatPemesanan) {
             System.out.println(pemesanan);
+        }
+        System.out.println("================================\n");
+    }
+
+    // Method untuk mencetak struk
+    public static void cetakStrukID() {
+        System.out.println("\n================================");
+        System.out.println("Cetak Struk Pemesanan:");
+        System.out.println("================================\n");
+    
+        System.out.print("Masukkan Nomor Pembelian Tiket : ");
+        String nomorPembelian = sc.next();
+        boolean cari = false;
+    
+        for (Pemesanan pemesanan : riwayatPemesanan) {
+            if (pemesanan.nomorPembelian.equals(nomorPembelian)) {
+                System.out.println(pemesanan);
+                cari = true;
+                break;  // Tidak perlu mencari lagi
+            }
+        }
+        if (!cari) {
+            System.out.println("\n- Nomor Pembelian Tiket Tidak Ditemukan -");
         }
         System.out.println("================================\n");
     }
