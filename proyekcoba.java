@@ -1,6 +1,5 @@
 import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -17,6 +16,7 @@ public class proyekcoba {
     static String[] jenisIdentitas = { "KTP", "SIM", "Paspor", "Kartu Pelajar" };
     static String[] jenisKelamin = { "Laki-Laki", "Perempuan" };
     static boolean[][][] kursiTersedia = new boolean[kelas.length][kota.length][];
+
     static int hargaTiket[][][] = {
             // Daftar Harga Tiket Ekonomi
             { { 0, 100000, 150000, 200000, 250000, 300000, 350000, 400000, 450000, 500000 },
@@ -54,6 +54,18 @@ public class proyekcoba {
                     { 600000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0, 200000 },
                     { 650000, 550000, 500000, 450000, 400000, 350000, 300000, 250000, 200000, 0 } }
     };
+    static double[][] jarak = {
+        { 0, 150, 210, 350, 450, 560, 550, 710, 850, 800 },
+        { 150, 0, 160, 310, 420, 530, 520, 680, 820, 770 },
+        { 210, 160, 0, 290, 400, 510, 500, 660, 800, 750 },
+        { 350, 310, 290, 0, 110, 220, 210, 370, 510, 460 },
+        { 450, 420, 400, 110, 0, 110, 100, 260, 400, 350 },
+        { 560, 530, 510, 220, 110, 0, 90, 250, 390, 340 },
+        { 550, 520, 500, 210, 100, 90, 0, 160, 300, 250 },
+        { 710, 680, 660, 370, 260, 250, 160, 0, 140, 90 },
+        { 850, 820, 800, 510, 400, 390, 300, 140, 0, 50 },
+        { 800, 770, 750, 460, 350, 340, 250, 90, 50, 0 }
+};
 
     // list untuk menyimpan riwayat pemesanan
     static List<Pemesanan> riwayatPemesanan = new ArrayList<>();
@@ -69,10 +81,11 @@ public class proyekcoba {
         String kelas;
         int totalHarga;
         String nomorPembelian;
+        String jadwalKeberangkatan;
 
         // constructor untuk class Pemesanan
         public Pemesanan(String nama, int umur, String jenisKelamin, String identitas, String asal, String tujuan,
-                String kelas, int totalHarga, String nomorPembelian) {
+                String kelas, int totalHarga, String nomorPembelian, String jadwalKeberangkatan) {
             this.nama = nama;
             this.umur = umur;
             this.jenisKelamin = jenisKelamin;
@@ -82,6 +95,7 @@ public class proyekcoba {
             this.kelas = kelas;
             this.totalHarga = totalHarga;
             this.nomorPembelian = nomorPembelian;
+            this.jadwalKeberangkatan = jadwalKeberangkatan;
         }
 
         // method untuk menampilkan data pemesanan ke riwayat pemesanan
@@ -90,7 +104,7 @@ public class proyekcoba {
                     + "\nIdentitas\t\t: "
                     + identitas + "\nAsal\t\t\t: " + asal + "\nTujuan\t\t\t: " + tujuan + "\nKelas\t\t\t: " + kelas
                     + "\nTotal Harga \t\t: " + "Rp."
-                    + totalHarga + "\nNomor Pembelian Tiket\t: " + nomorPembelian
+                    + totalHarga + "\nNomor Pembelian Tiket\t: " + nomorPembelian + "\nJadwal Keberangkatan\t: " + jadwalKeberangkatan
                     + "\n========================";
         }
     }
@@ -99,46 +113,65 @@ public class proyekcoba {
         Scanner sc = new Scanner(System.in);
         inisialKursi();
 
-        int pilihmenu;
+        int pilihmenu; int pilihBahasa;
 
         do {
             System.out.println("=============================================================");
             System.out.println("========== SELAMAT DATANG DI SISTEM BOOKING KERETA ==========");
             System.out.println("=============================================================");
+            System.out.println();
+            System.out.println("Pilih Bahasa :");
+            System.out.println("1. Indonesia\n2. English");
+            System.out.print("Pilihan (1-2) : ");
+            pilihBahasa = sc.nextInt();
 
-            System.out.println(
-                    "\nDaftar Menu = \n1.Pesan Tiket\n2.Tampilkan Jadwal\n3.Tampilkan Harga\n4.Tampilkan Riwayat Pemesanan\n5.Cetak Struk\n6.Keluar");
-            System.out.println("=============================================================");
-            System.out.print("\nPilihan : ");
-            pilihmenu = sc.nextInt();
-
-            switch (pilihmenu) {
+            switch (pilihBahasa) {
                 case 1:
-                    pemesananTiket();
+                int pilihanMenu;
+                do {
+                    pilihanMenu = tampilkanMenuUtama();
+                    switch (pilihanMenu) {
+                        case 1:
+                            pemesananTiket();
+                            break;
+                        case 2:
+                            tampilkanJadwalKereta();
+                            break;
+                        case 3:
+                            tampilkanHargaTiket();
+                            break;
+                        case 4:
+                            tampilkanRiwayatPemesanan();
+                            break;
+                        case 5:
+                            cetakStrukID();
+                            break;
+                        case 6:
+                            System.out.println("=============================================================");
+                            System.out.println("==============\t\tTERIMA KASIH\t\t=============");
+                            System.out.println("=============================================================");
+                            System.exit(0); // agar keluar dari program secara langsung
+                            break;
+                        default:
+                            System.out.println("=============== INPUT YANG ANDA MASUKKAN SALAH ==============\n\n");
+                    }
+                } while (pilihanMenu != 6);
+                
                     break;
                 case 2:
-                    tampilkanJadwalKereta();
-                    break;
-                case 3:
-                    tampilkanHargaTiket();
-                    break;
-                case 4:
-                    tampilkanRiwayatPemesanan();
-                    break;
-                case 5:
-                    cetakStrukID();
-                    break;
-                case 6:
-                    System.out.println("=============================================================");
-                    System.out.println("==============\t\tTERIMA KASIH\t\t=============");
-                    System.out.println("=============================================================");
+                    System.out.println("Sorry, this feature is not available yet.");
                     break;
                 default:
-                    System.out.println("=============== INPUT YANG ANDA MASUKKAN SALAH ==============\n\n");
+                    break;
             }
-        } while (pilihmenu != 6);
-
-        sc.close();
+        } while (true);
+    }
+    static int tampilkanMenuUtama() {
+        System.out.println(
+                "\nDaftar Menu = \n1.Pesan Tiket\n2.Tampilkan Jadwal\n3.Tampilkan Harga\n4.Tampilkan Riwayat Pemesanan\n5.Cetak Struk\n6.Keluar");
+        System.out.println("=============================================================");
+        System.out.print("\nPilihan : ");
+        return sc.nextInt();
     }
 
     public static void pemesananTiket() {
@@ -180,11 +213,9 @@ public class proyekcoba {
         String hurufHuruf = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         // Generate nomor acak
-        int acakNomor = random.nextInt(900000000) + 1000000000; // Nomor acak antara 1000000000 dan 1999999999
-
+        int acakNomor = random.nextInt(1000000000); // Nomor acak antara 0 - 999999999
         // Generate huruf acak
         char hurufAcak = hurufHuruf.charAt(random.nextInt(hurufHuruf.length()));
-
         // Gabungkan nomor acak dan huruf acak
         String nomorPembelian = hurufAcak + String.valueOf(acakNomor);
 
@@ -267,6 +298,9 @@ public class proyekcoba {
             int hargaTiket = pilihTempatDuduk(pilihKelas - 1, pilihAsal - 1, pilihTujuan - 1);
             totalHarga += hargaTiket;
         }
+
+        String jadwalKeberangkatan = hitungJadwalKeberangkatan(pilihKelas - 1, pilihAsal - 1, pilihTujuan - 1);
+
         Pemesanan newBooking = new Pemesanan(
                 nama,
                 umur,
@@ -276,7 +310,8 @@ public class proyekcoba {
                 kota[pilihTujuan - 1],
                 kelas[pilihKelas - 1],
                 totalHarga,
-                nomorPembelian);
+                nomorPembelian,
+                jadwalKeberangkatan);
         riwayatPemesanan.add(newBooking);
 
         if (pilihAsal < 1 || pilihAsal > kota.length || pilihTujuan < 1 || pilihTujuan > kota.length || pilihKelas < 1
@@ -382,7 +417,7 @@ public class proyekcoba {
         System.out.println("Jenis Identitas \t: " + pilihIdentitas);
         System.out.println("Kota Asal Keberangkatan : " + pilihAsal);
         System.out.println("Kota Tujuan \t\t: " + pilihTujuan);
-        System.out.println("Total Harga \t\t: " +"Rp." + totalHarga);
+        System.out.println("Total Harga \t\t: " + "Rp." + totalHarga);
         System.out.println("Nomor Pembelian Tiket\t: " + nomorPembelian);
         System.out.println("================================\n");
     }
@@ -410,6 +445,15 @@ public class proyekcoba {
             System.out.println("Nomor kursi tidak valid. Silakan pilih nomor kursi antara 1 - 64.");
             return pilihTempatDuduk(pilihKelas, pilihAsal, pilihTujuan); // Pilih tempat lagi jika nomor tidak valid
         }
+    }
+
+    static String hitungJadwalKeberangkatan(int pilihKelas, int pilihAsal, int pilihTujuan) {
+        double kecepatan = (pilihKelas == 0) ? 80 : ((pilihKelas == 1) ? 90 : 100); // Perhatikan indeks kelas
+        double jarakTempuh = jarak[pilihAsal][pilihTujuan];
+        double waktuTempuh = jarakTempuh / kecepatan;
+        int jamMulai = 8; // Misalnya, semua kereta berangkat pada jam 8 pagi
+        int[] waktuSelesai = hitungWaktuSelesai(jamMulai, waktuTempuh);
+        return String.format("%02d:%02d - %02d:%02d", jamMulai, 0, waktuSelesai[0], waktuSelesai[1]);
     }
 
     // Method untuk menginisialisasi kursi yang tersedia
@@ -496,19 +540,6 @@ public class proyekcoba {
 
     // Method untuk menampilkan jadwal kereta
     public static void tampilkanJadwalKereta() {
-
-        double[][] jarak = {
-                { 0, 150, 210, 350, 450, 560, 550, 710, 850, 800 },
-                { 150, 0, 160, 310, 420, 530, 520, 680, 820, 770 },
-                { 210, 160, 0, 290, 400, 510, 500, 660, 800, 750 },
-                { 350, 310, 290, 0, 110, 220, 210, 370, 510, 460 },
-                { 450, 420, 400, 110, 0, 110, 100, 260, 400, 350 },
-                { 560, 530, 510, 220, 110, 0, 90, 250, 390, 340 },
-                { 550, 520, 500, 210, 100, 90, 0, 160, 300, 250 },
-                { 710, 680, 660, 370, 260, 250, 160, 0, 140, 90 },
-                { 850, 820, 800, 510, 400, 390, 300, 140, 0, 50 },
-                { 800, 770, 750, 460, 350, 340, 250, 90, 50, 0 }
-        };
 
         // Pilih kota dan kelas
         int pilihKota;
@@ -664,16 +695,16 @@ public class proyekcoba {
         System.out.println("\n================================");
         System.out.println("Cetak Struk Pemesanan:");
         System.out.println("================================\n");
-    
+
         System.out.print("Masukkan Nomor Pembelian Tiket : ");
         String nomorPembelian = sc.next();
         boolean cari = false;
-    
+
         for (Pemesanan pemesanan : riwayatPemesanan) {
             if (pemesanan.nomorPembelian.equals(nomorPembelian)) {
                 System.out.println(pemesanan);
                 cari = true;
-                break;  // Tidak perlu mencari lagi
+                break; // Tidak perlu mencari lagi
             }
         }
         if (!cari) {
